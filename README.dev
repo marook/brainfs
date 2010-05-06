@@ -1,0 +1,15 @@
+brainfs - a very brainy file system
+developer readme
+
+1) Logging
+2) Profiling
+3) Tracing
+
+---------------------------------------------------------------------
+Logging
+
+You can enable logging by setting a debug environment variable before you
+launch brainfs:
+$ export DEBUG=1
+
+brainfs will log to the console and the file /tmp/brainfs.log

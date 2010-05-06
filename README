@@ -1,0 +1,56 @@
+brainfs - a very brainy file system
+
+1) Introduction
+2) Requirements
+3) Installation
+4) Usage
+5) Tests
+6) Contact
+
+---------------------------------------------------------------------
+Introduction
+
+TODO
+
+This document contains basic usage instructions for users. To develop or debug
+brainfs see the README.dev file.
+
+---------------------------------------------------------------------
+Requirements
+
+* python 2.5, 2.6
+* Linux kernel with fuse enabled
+* python-fuse installed
+
+---------------------------------------------------------------------
+Installation
+
+To install brainfs into your home directory type the following:
+
+$ python setup.py install --home ~/.local
+
+If you haven't already extended your local python path then add the following
+to your environment configuration script. For example to your .bashrc:
+
+export PYTHONPATH=~/.local/lib/python:$PYTHONPATH
+
+---------------------------------------------------------------------
+Usage
+
+After installation brainfs can be started the following way.
+
+TODO
+
+---------------------------------------------------------------------
+Tests
+
+You can execute the test cases via the setup.py script in the project's root
+directory.
+
+$ python setup.py test
+
+---------------------------------------------------------------------
+Contact
+
+* http://wiki.github.com/marook/brainfs
+* Markus Pielmeier <markus.pielmeier@gmx.de>
