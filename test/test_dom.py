@@ -19,12 +19,40 @@
 #
 
 import unittest
+from brainfs import dom
 
-class TestSubject(unittest.TestCase):
+class AbstractSubjectTest(unittest.TestCase):
 
-    def testNothin(self):
-        # TODO
-        pass
+    def validateSubject(self, s):
+        c = s.connection
+
+        data = c.read()
+
+        c.close()
+
+        self.assertTrue(len(data) > 0)
+        
+
+class TestFileSubject(AbstractSubjectTest):
+
+    def testReadData(self):
+        """Tries to read data from a FileSubject
+        """
+
+        s = dom.FileSubject('/vmlinuz')
+
+        self.validateSubject(s)
+
+class TestHttpSubject(AbstractSubjectTest):
+
+    def testReadData(self):
+        """Tries to read data from a HttpSubject
+        """
+
+        s = dom.HttpSubject('/', 'www.heise.de')
+
+        self.validateSubject(s)
+
 
 if __name__ == "__main__":
     import brainfs

@@ -18,9 +18,54 @@
 #
 
 class Subject(object):
+    """Superclass for all subjects.
+
+    All subjects must supply a connection parameter. This parameter returns
+    a stream with the content of the subject.
+    """
 
     def __init__(self, name):
         self.name = name
+
+class FileSubject(Subject):
+    
+    def __init__(self, fileName):
+        self.fileName = fileName
+
+    @property
+    def connection(self):
+        f = open(self.fileName, 'r')
+
+        return f
+        
+
+class HttpSubject(Subject):
+
+    def __init__(self, path, host, port = 80, method = 'GET'):
+        self.path = path
+        self.host = host
+        self.port = port
+        self.method = method
+
+    @property
+    def connection(self):
+        import httplib
+
+        c = httplib.HTTPConnection(self.host, self.port)
+        c.request(self.method, self.path)
+
+        r = c.getresponse()
+
+        class Connection(object):
+
+            def read(self, amount = None):
+                return r.read(amount)
+
+            def close(self):
+                c.close()
+
+        return Connection()
+        
 
 class Predicate(object):
     
