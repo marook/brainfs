@@ -76,6 +76,13 @@ class HttpSubject(Subject):
 
 class Predicate(object):
     
-    def __init__(self, name):
+    def __init__(self, name, namespace):
+        """Creates a Predicate
+
+        @parameter name This is the short name of the predicate. It may appear
+        in different predicates.
+        @parameter namespace This is the unique name of this predicate. Should
+        have URL syntax like 'http://www.bloab.com/image/width'.
+        """
         self.name = name
-        # TODO add namespace
+        self.namespace = namespace
