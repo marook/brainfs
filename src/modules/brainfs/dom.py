@@ -30,6 +30,10 @@ class Subject(object):
 class FileSubject(Subject):
     
     def __init__(self, fileName):
+        import os.path
+
+        Subject.__init__(self, os.path.basename(fileName))
+
         self.fileName = fileName
 
     @property
@@ -42,6 +46,9 @@ class FileSubject(Subject):
 class HttpSubject(Subject):
 
     def __init__(self, path, host, port = 80, method = 'GET'):
+        # TODO create more sane subject name
+        Subject.__init__(self, (host + path).replace('/', '_'))
+
         self.path = path
         self.host = host
         self.port = port
