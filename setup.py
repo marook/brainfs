@@ -35,8 +35,6 @@ projectdir = dirname(abspath(__file__))
 srcdir = pjoin(projectdir, 'src')
 moddir = pjoin(srcdir, 'modules')
 testdir = pjoin(projectdir, 'test')
-testdatadir = pjoin(projectdir, 'etc', 'test', 'events')
-testmntdir = pjoin(projectdir, 'mnt')
 
 class test(Command):
     description = 'run tests'
@@ -57,8 +55,6 @@ class test(Command):
 
         print "..using:"
         print "  testdir:", testdir
-        print "  testdatadir:", testdatadir
-        print "  testmntdir:", testmntdir
         print "  tests:", tests
         print "  sys.path:", sys.path
         print
