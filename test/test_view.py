@@ -18,7 +18,6 @@
 #
 
 import unittest
-from brainfs import view
 
 class AbstractViewTest(unittest.TestCase):
 
