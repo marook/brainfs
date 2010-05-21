@@ -17,9 +17,20 @@
 # along with brainfs.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import stat
 import view
 
 class SubjectDirectoryView(view.PatternView):
 
     def __init__(self):
         view.PatternView.__init__(self, '^/[^/]+$')
+
+    def getattr(self, path):
+        a = view.FSAttributes()
+        a.st_mode = stat.S_IFDIR | 0555
+        a.st_nlink = 2
+
+        return -errno.ENOENT
+
+    def readdir(self, path, offset):
+        pass
