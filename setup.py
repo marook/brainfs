@@ -61,6 +61,10 @@ class test(Command):
         sys.path.insert(0, moddir)
         sys.path.insert(0, srcdir)
 
+        if 'DEBUG' in os.environ:
+            from brainfs.brainfs import setUpLogging
+            setUpLogging()
+
         suite = TestLoader().loadTestsFromNames(tests)
         TextTestRunner(verbosity=self._verbosity).run(suite)
 
