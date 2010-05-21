@@ -17,21 +17,31 @@
 # along with brainfs.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import stat
 import unittest
 
 class AbstractViewTest(unittest.TestCase):
 
-    def validateView(self, view):
+    def validateView(self, view, path):
+        attr = view.getattr(path)
 
-        # TODO implement view interface validation
+        self.assertTrue(attr)
 
-        pass
+        if (attr.st_mode | stat.S_IFDIR > 0):
+            # path is a directory
+
+            # TODO implement propper offset handling
+            dir = view.readdir(path, 0)
+
+            # TODO self.assertTrue(dir)
+        else:
+            self.fail('Unknown attributes ' + attr)
 
 
 class AbstractPatternViewTest(AbstractViewTest):
 
     def validatePatternView(self, view, matchPath, notMatchPath):
-        self.validateView(view)
+        self.validateView(view, matchPath)
 
         self.assertTrue(view.canHandlePath(matchPath))
         self.assertFalse(view.canHandlePath(notMatchPath))

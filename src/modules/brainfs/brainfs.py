@@ -102,15 +102,28 @@ class BrainFS(fuse.Fuse):
         return view.getattr(path)
 
     def readdir(self, path, offset):
-        pass
+        view = self.findView(path)
+
+        if not view:
+            logging.info('No View for path ' + path)
+
+            return -errno.ENOENT
+
+        return view.readdir(path, offset)
             
     def readlink(self, path):
+        logging.warn('readlink not yet implemented: ' + path)
+
         return -errno.ENOENT
 
     def open(self, path, flags):
+        logging.warn('open not yet implemented: ' + path)
+
         return -errno.ENOENT
 
     def read(self, path, size, offset):
+        logging.warn('read not yet implemented: ' + path)
+
         return -errno.ENOENT
 
 def main():

@@ -18,6 +18,7 @@
 #
 
 import errno
+import fuse
 import stat
 import view
 
@@ -31,7 +32,12 @@ class RootDirectoryView(view.PatternView):
         a.st_mode = stat.S_IFDIR | 0555
         a.st_nlink = 2
 
-        return -errno.ENOENT
+        return a
 
     def readdir(self, path, offset):
-        pass
+        #yield fuse.Direntry('.')
+        #yield fuse.Direntry('..')
+
+        # TODO
+
+        return []

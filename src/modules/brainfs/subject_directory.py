@@ -31,7 +31,7 @@ class SubjectDirectoryView(view.PatternView):
         a.st_mode = stat.S_IFDIR | 0555
         a.st_nlink = 2
 
-        return -errno.ENOENT
+        return a
 
     def readdir(self, path, offset):
         pass
