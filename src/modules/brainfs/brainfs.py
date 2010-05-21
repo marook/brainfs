@@ -17,8 +17,53 @@
 # along with brainfs.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+#====================================================================
+# first set up exception handling and logging
+
+import logging
+import sys
+
+def setUpLogging():
+    def exceptionCallback(eType, eValue, eTraceBack):
+        import cgitb
+
+        txt = cgitb.text((eType, eValue, eTraceBack))
+
+        logging.fatal(txt)
+    
+        # sys.exit(1)
+
+    # configure file logger
+    logging.basicConfig(level = logging.DEBUG,
+                        format = '%(asctime)s %(levelname)s %(message)s',
+                        filename = '/tmp/brainfs.log',
+                        filemode = 'a')
+    
+    # configure console logger
+    consoleHandler = logging.StreamHandler(sys.stdout)
+    consoleHandler.setLevel(logging.DEBUG)
+    
+    consoleFormatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+    consoleHandler.setFormatter(consoleFormatter)
+    logging.getLogger().addHandler(consoleHandler)
+
+    # replace default exception handler
+    sys.excepthook = exceptionCallback
+    
+    logging.debug('Logging and exception handling has been set up')
+
+if __name__ == '__main__':
+    from os import environ as env
+
+    if 'DEBUG' in env:
+        setUpLogging()
+
+#====================================================================
+# here the application begins
+
 import errno
 import fuse
+import subject_directory
 
 if not hasattr(fuse, '__version__'):
     raise RuntimeError, \
@@ -31,8 +76,28 @@ class BrainFS(fuse.Fuse):
     def __init__(self, initwd, *args, **kw):
         fuse.Fuse.__init__(self, *args, **kw)
 
+        self.views = [
+            subject_directory.SubjectDirectoryView()
+            ]
+
+    def findView(self, path):
+        for view in self.views:
+            if not view.canHandlePath(path):
+                continue
+
+            return view
+
+        return None
+
     def getattr(self, path):
-        return -errno.ENOENT
+        view = self.findView(path)
+
+        if not view:
+            logging.info('No View for path ' + path)
+
+            return -errno.ENOENT
+
+        return view.getattr(path)
 
     def readdir(self, path, offset):
         pass
@@ -47,6 +112,8 @@ class BrainFS(fuse.Fuse):
         return -errno.ENOENT
 
 def main():
+    import os
+
     fs = BrainFS(os.getcwd(),
             version = "%prog " + fuse.__version__,
             dash_s_do = 'setsingle')

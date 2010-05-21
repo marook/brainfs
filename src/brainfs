@@ -18,7 +18,7 @@
 # along with brainfs.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from brainfs import main, setUpLogging
+from brainfs.brainfs import main, setUpLogging
 
 if __name__ == '__main__':
     from os import environ as env

@@ -17,6 +17,7 @@
 # along with brainfs.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import errno
 import stat
 import view
 

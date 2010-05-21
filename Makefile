@@ -24,7 +24,6 @@ installdirs = $(bindir) $(docdir)
 
 srcdir = .
 
-testdatadir = $(srcdir)/etc/test/events
 testmntdir = $(shell pwd)/mnt
 
 pymoddir = $(srcdir)/src/modules
@@ -74,7 +73,7 @@ $(testmntdir):
 .PHONY: mounttest
 mounttest: $(testmntdir)
 	PYTHONPATH=$(pymoddir):$(PYTHONPATH) \
-		$(PYTHON) $(srcdir)/src/brainfs -i $(testdatadir) $(testmntdir)
+		$(PYTHON) $(srcdir)/src/brainfs $(testmntdir)
 
 .PHONY: unmounttest
 unmounttest:
