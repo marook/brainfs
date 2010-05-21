@@ -63,6 +63,7 @@ if __name__ == '__main__':
 
 import errno
 import fuse
+import root_directory
 import subject_directory
 
 if not hasattr(fuse, '__version__'):
@@ -77,6 +78,7 @@ class BrainFS(fuse.Fuse):
         fuse.Fuse.__init__(self, *args, **kw)
 
         self.views = [
+            root_directory.RootDirectoryView(),
             subject_directory.SubjectDirectoryView()
             ]
 
