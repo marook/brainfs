@@ -84,7 +84,7 @@ class BrainFS(fuse.Fuse):
 
         self.views = [
             root_directory.RootDirectoryView(self.subjects),
-            subject_directory.SubjectDirectoryView()
+            subject_directory.SubjectDirectoryView(self.subjects)
             ]
 
     def findView(self, path):
@@ -132,10 +132,10 @@ class BrainFS(fuse.Fuse):
         return -errno.ENOENT
 
     def symlink(self, path, linkPath):
-        view = self.findView(path)
+        view = self.findView(linkPath)
 
         if not view:
-            logging.info('No View for path ' + path)
+            logging.info('No View for path ' + linkPath)
 
             return -errno.ENOENT
 

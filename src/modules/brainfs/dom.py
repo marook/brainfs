@@ -45,6 +45,9 @@ class FileSubject(Subject):
     def __eq__(self, o):
         # TODO maybe we should match type of self and o too?
 
+        if o == None:
+            return False
+
         return (self.fileName == o.fileName)
         
 

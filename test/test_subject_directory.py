@@ -17,6 +17,7 @@
 # along with brainfs.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from brainfs import dom
 import unittest
 import test_view
 from brainfs import subject_directory
@@ -27,7 +28,11 @@ class SubjectDirectoryViewTest(test_view.AbstractPatternViewTest):
         """Validate View interface for SubjectDirectoryView
         """
 
-        view = subject_directory.SubjectDirectoryView()
+        subjects = [
+            dom.FileSubject('etc/demo_resources/00_IMG008.jpg')
+            ]
+
+        view = subject_directory.SubjectDirectoryView(subjects)
 
         self.validatePatternView(view,
                                  '/00_IMG008.jpg',

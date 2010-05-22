@@ -27,6 +27,7 @@ class AbstractViewTest(unittest.TestCase):
         attr = view.getattr(path)
 
         self.assertNotEquals(-errno.ENOSYS, attr)
+        self.assertNotEquals(-errno.ENOENT, attr)
 
         if (attr.st_mode | stat.S_IFDIR > 0):
             # path is a directory
