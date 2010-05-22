@@ -17,16 +17,21 @@
 # along with brainfs.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import dom
 import errno
 import fuse
+import log
 import stat
 import view
 
 class RootDirectoryView(view.PatternView):
 
-    def __init__(self):
+    def __init__(self, subjects):
         view.PatternView.__init__(self, '^/$')
 
+        self.subjects = subjects
+
+    @log.logCall
     def getattr(self, path):
         a = view.FSAttributes()
         a.st_mode = stat.S_IFDIR | 0555
@@ -34,10 +39,18 @@ class RootDirectoryView(view.PatternView):
 
         return a
 
+    @log.logCall
     def readdir(self, path, offset):
-        #yield fuse.Direntry('.')
-        #yield fuse.Direntry('..')
+        yield fuse.Direntry('.')
+        yield fuse.Direntry('..')
 
-        # TODO
+        for s in self.subjects:
+            yield fuse.Direntry(s.name)
 
-        return []
+    @log.logCall
+    def symlink(self, path, linkPath):
+        s = dom.FileSubject(path)
+
+        self.subjects.append(s)
+
+        return 0

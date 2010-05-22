@@ -23,7 +23,7 @@ from brainfs import dom
 
 class AbstractSubjectTest(unittest.TestCase):
 
-    def validateSubject(self, s):
+    def validateSubjectConnection(self, s):
         c = s.connection
 
         data = c.read()
@@ -31,7 +31,15 @@ class AbstractSubjectTest(unittest.TestCase):
         c.close()
 
         self.assertTrue(len(data) > 0)
-        
+
+    def validateSubjectName(self, s):
+        n = s.name
+
+        self.assertTrue(len(n) > 0)
+
+    def validateSubject(self, s):
+        self.validateSubjectConnection(s)
+        self.validateSubjectName(s)
 
 class TestFileSubject(AbstractSubjectTest):
 

@@ -17,30 +17,18 @@
 # along with brainfs.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import log
-import errno
-import stat
-import view
+import functools
+import logging
 
-class SubjectDirectoryView(view.PatternView):
+def logCall(f):
 
-    def __init__(self):
-        view.PatternView.__init__(self, '^/[^/]+$')
+    @functools.wraps(f)
+    def logCall(*args, **kwargs):
+        o = args[0]
 
-    @log.logCall
-    def getattr(self, path):
-        a = view.FSAttributes()
-        a.st_mode = stat.S_IFDIR | 0555
-        a.st_nlink = 2
+        logger = logging.getLogger(o.__class__.__name__)
+        logger.debug(f.__name__ + '(' + (', '.join('\'' + str(a) + '\'' for a in args[1:])) + ')')
 
-        return -errno.ENOSYS
-        # TODO return a
+        return f(*args, **kwargs)
 
-    @log.logCall
-    def readdir(self, path, offset):
-        # TODO implement me
-        return []
-
-    @log.logCall
-    def symlink(self, path, linkPath):
-        return -errno.ENOENT
+    return logCall

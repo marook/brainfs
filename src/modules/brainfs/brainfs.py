@@ -33,9 +33,11 @@ def setUpLogging():
     
         # sys.exit(1)
 
+    format = '%(asctime)s %(levelname)s %(name)s: %(message)s'
+
     # configure file logger
     logging.basicConfig(level = logging.DEBUG,
-                        format = '%(asctime)s %(levelname)s %(message)s',
+                        format = format,
                         filename = '/tmp/brainfs.log',
                         filemode = 'a')
     
@@ -43,7 +45,7 @@ def setUpLogging():
     consoleHandler = logging.StreamHandler(sys.stdout)
     consoleHandler.setLevel(logging.DEBUG)
     
-    consoleFormatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+    consoleFormatter = logging.Formatter(format)
     consoleHandler.setFormatter(consoleFormatter)
     logging.getLogger().addHandler(consoleHandler)
 
@@ -77,8 +79,11 @@ class BrainFS(fuse.Fuse):
     def __init__(self, initwd, *args, **kw):
         fuse.Fuse.__init__(self, *args, **kw)
 
+        # TODO load subjects from persisten store
+        self.subjects = []
+
         self.views = [
-            root_directory.RootDirectoryView(),
+            root_directory.RootDirectoryView(self.subjects),
             subject_directory.SubjectDirectoryView()
             ]
 
@@ -125,6 +130,16 @@ class BrainFS(fuse.Fuse):
         logging.warn('read not yet implemented: ' + path)
 
         return -errno.ENOENT
+
+    def symlink(self, path, linkPath):
+        view = self.findView(path)
+
+        if not view:
+            logging.info('No View for path ' + path)
+
+            return -errno.ENOENT
+
+        return view.symlink(path, linkPath)
 
 def main():
     import os

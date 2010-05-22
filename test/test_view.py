@@ -17,6 +17,7 @@
 # along with brainfs.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import errno
 import stat
 import unittest
 
@@ -25,13 +26,16 @@ class AbstractViewTest(unittest.TestCase):
     def validateView(self, view, path):
         attr = view.getattr(path)
 
-        self.assertTrue(attr)
+        self.assertNotEquals(-errno.ENOSYS, attr)
 
         if (attr.st_mode | stat.S_IFDIR > 0):
             # path is a directory
 
             # TODO implement propper offset handling
-            dir = view.readdir(path, 0)
+            for entry in view.readdir(path, 0):
+                self.assertTrue(entry != None)
+
+            r = view.symlink('the file', path + '/the link')
 
             # TODO self.assertTrue(dir)
         else:

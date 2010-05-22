@@ -17,6 +17,7 @@
 # along with brainfs.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from brainfs import dom
 import unittest
 import test_view
 from brainfs import root_directory
@@ -27,11 +28,20 @@ class RootDirectoryViewTest(test_view.AbstractPatternViewTest):
         """Validate View interface for RootDirectoryView
         """
 
-        view = root_directory.RootDirectoryView()
+        subjects = []
+
+        view = root_directory.RootDirectoryView(subjects)
 
         self.validatePatternView(view,
                                  '/',
                                  '/00_IMG008')
+
+        # add new subject
+        r = view.symlink('the new subject', 'i do not care')
+        self.assertEquals(0, r)
+        self.assertTrue(dom.FileSubject('the new subject') in subjects)
+        self.assertFalse(dom.FileSubject('i do not care') in subjects)
+
 
 if __name__ == "__main__":
     import brainfs

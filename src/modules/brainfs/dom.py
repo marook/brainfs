@@ -41,6 +41,11 @@ class FileSubject(Subject):
         f = open(self.fileName, 'r')
 
         return f
+
+    def __eq__(self, o):
+        # TODO maybe we should match type of self and o too?
+
+        return (self.fileName == o.fileName)
         
 
 class HttpSubject(Subject):
