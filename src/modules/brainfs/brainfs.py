@@ -79,7 +79,7 @@ class BrainFS(fuse.Fuse):
     def __init__(self, initwd, *args, **kw):
         fuse.Fuse.__init__(self, *args, **kw)
 
-        # TODO load subjects from persisten store
+        # TODO load subjects from persistent store
         self.subjects = []
 
         self.views = [
