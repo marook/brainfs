@@ -52,6 +52,8 @@ class AbstractViewTest(unittest.TestCase):
 
             r = view.symlink('the file', path + '/the link')
         elif (attr.st_mode & stat.S_IFLNK == stat.S_IFLNK):
+            l = view.readlink(path)
+
             # TODO implement some tests
             pass
         else:
