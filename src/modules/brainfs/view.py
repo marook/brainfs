@@ -32,6 +32,9 @@ class FSAttributes(object):
         self.st_atime = 0
         self.st_mtime = 0
         self.st_ctime = 0
+
+    def __str__(self):
+        return '[' + ', '.join([field + ': ' + str(self.__dict__[field]) for field in self.__dict__]) + ']'
     
 
 class View(object):

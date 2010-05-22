@@ -18,8 +18,19 @@
 #
 
 import errno
+import logging
 import stat
 import unittest
+from brainfs import view
+
+class FSAttributesTest(unittest.TestCase):
+
+    def testStr(self):
+        a = view.FSAttributes()
+
+        self.assertTrue(len(str(a)) > 0)
+
+        logging.debug('Test attributes are ' + str(a))
 
 class AbstractViewTest(unittest.TestCase):
 
@@ -29,7 +40,7 @@ class AbstractViewTest(unittest.TestCase):
         self.assertNotEquals(-errno.ENOSYS, attr)
         self.assertNotEquals(-errno.ENOENT, attr)
 
-        if (attr.st_mode | stat.S_IFDIR > 0):
+        if (attr.st_mode | stat.S_IFDIR == stat.S_IFDIR):
             # path is a directory
 
             # TODO implement propper offset handling
@@ -40,7 +51,7 @@ class AbstractViewTest(unittest.TestCase):
 
             # TODO self.assertTrue(dir)
         else:
-            self.fail('Unknown attributes ' + attr)
+            self.fail('Unknown attributes ' + str(attr))
 
 
 class AbstractPatternViewTest(AbstractViewTest):
