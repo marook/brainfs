@@ -26,6 +26,9 @@ from brainfs import view
 class FSAttributesTest(unittest.TestCase):
 
     def testStr(self):
+        """Test the FSAttributes.__str__ method
+        """
+
         a = view.FSAttributes()
 
         self.assertTrue(len(str(a)) > 0)
@@ -40,7 +43,7 @@ class AbstractViewTest(unittest.TestCase):
         self.assertNotEquals(-errno.ENOSYS, attr)
         self.assertNotEquals(-errno.ENOENT, attr)
 
-        if (attr.st_mode | stat.S_IFDIR == stat.S_IFDIR):
+        if (attr.st_mode & stat.S_IFDIR == stat.S_IFDIR):
             # path is a directory
 
             # TODO implement propper offset handling
@@ -48,8 +51,9 @@ class AbstractViewTest(unittest.TestCase):
                 self.assertTrue(entry != None)
 
             r = view.symlink('the file', path + '/the link')
-
-            # TODO self.assertTrue(dir)
+        elif (attr.st_mode & stat.S_IFLNK == stat.S_IFLNK):
+            # TODO implement some tests
+            pass
         else:
             self.fail('Unknown attributes ' + str(attr))
 
