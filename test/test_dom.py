@@ -59,11 +59,11 @@ class TestHttpSubject(AbstractSubjectTest):
         """Tries to read data from a HttpSubject
         """
 
-        s = dom.HttpSubject('/index.html', 'www.heise.de')
+        s = dom.HttpSubject('/index.html', 'localhost')
 
         self.validateSubject(s)
 
-        self.assertEqual('www.heise.de_index.html', s.name)
+        self.assertEqual('localhost_index.html', s.name)
 
 
 if __name__ == "__main__":
