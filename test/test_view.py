@@ -54,7 +54,23 @@ class AbstractViewTest(unittest.TestCase):
         elif (attr.st_mode & stat.S_IFLNK == stat.S_IFLNK):
             l = view.readlink(path)
 
-            # TODO implement some tests
+            self.assertNotEquals(-errno.ENOENT, l)
+
+            self.assertTrue(len(l) > 0)
+        elif (attr.st_mode & stat.S_IFCHR == stat.S_IFCHR):
+            self.assertTrue(attr.st_size >= 0)
+
+            content = view.read(path, min(attr.st_size, 100), 0)
+
+            self.assertNotEquals(-errno.ENOSYS, content)
+            self.assertNotEquals(-errno.ENOENT, content)
+
+            self.assertTrue(content != None)
+
+            logging.debug('Content: ' + str(content))
+
+            # TODO validate block file
+            
             pass
         else:
             self.fail('Unknown attributes ' + str(attr))

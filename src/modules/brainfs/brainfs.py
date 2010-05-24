@@ -86,7 +86,7 @@ class BrainFS(fuse.Fuse):
         self.views = [
             root_directory.RootDirectoryView(self.subjects),
             subject_directory.SubjectDirectoryView(self.subjects),
-            content_link.ContentLinkView(self.subjects)
+            content_link.ContentView(self.subjects)
             ]
 
     def findView(self, path):
@@ -119,9 +119,14 @@ class BrainFS(fuse.Fuse):
         return view.readdir(path, offset)
             
     def readlink(self, path):
-        logging.warn('readlink not yet implemented: ' + path)
+        view = self.findView(linkPath)
 
-        return -errno.ENOENT
+        if not view:
+            logging.info('No View for path ' + path)
+
+            return -errno.ENOENT
+
+        return view.readlink(path)
 
     def open(self, path, flags):
         logging.warn('open not yet implemented: ' + path)
@@ -129,9 +134,14 @@ class BrainFS(fuse.Fuse):
         return -errno.ENOENT
 
     def read(self, path, size, offset):
-        logging.warn('read not yet implemented: ' + path)
+        view = self.findView(linkPath)
 
-        return -errno.ENOENT
+        if not view:
+            logging.info('No View for path ' + path)
+
+            return -errno.ENOENT
+
+        return view.read(path, size, offset)
 
     def symlink(self, path, linkPath):
         view = self.findView(linkPath)
