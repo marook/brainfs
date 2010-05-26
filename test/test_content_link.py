@@ -20,22 +20,37 @@
 from brainfs import dom
 import unittest
 import test_view
-from brainfs import subject_directory
+from brainfs import content_link
 
-class SubjectDirectoryViewTest(test_view.AbstractNodeViewTest):
+class ContentViewTest(test_view.AbstractPatternViewTest):
 
-    def testInterface(self):
-        """Validate View interface for SubjectDirectoryView
+    def testInterfaceFile(self):
+        """Validate View interface for ContentView with a FileSubject
         """
 
         subjects = [
             dom.FileSubject('etc/demo_resources/00_IMG008.jpg')
             ]
 
-        view = subject_directory.SubjectDirectoryView(subjects)
+        view = content_link.ContentView(subjects)
 
-        self.validateNodeView(view,
-                              '/00_IMG008.jpg')
+        self.validatePatternView(view,
+                                 '/00_IMG008.jpg/content.jpg',
+                                 '/00_IMG008.jpg/other')
+
+    def testInterfaceHttpSubject(self):
+        """Validate View interface for ContentView with a HttpSubject
+        """
+
+        subjects = [
+            dom.HttpSubject('/index.html', 'localhost')
+            ]
+
+        view = content_link.ContentView(subjects)
+
+        self.validatePatternView(view,
+                                 '/localhost_index.html/content.html',
+                                 '/00_IMG008.jpg/other')
 
 if __name__ == "__main__":
     import brainfs

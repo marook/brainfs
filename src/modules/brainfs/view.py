@@ -18,6 +18,7 @@
 #
 
 import errno
+import log
 
 class FSAttributes(object):
     
@@ -49,17 +50,6 @@ class View(object):
     def getattr(self, path):
         return -errno.ENOENT
 
-    def readdir(self, path, offset):
-        pass
-            
-    def readlink(self, path):
-        return -errno.ENOENT
-
-    def open(self, path, flags):
-        return -errno.ENOENT
-
-    def read(self, path, size, offset):
-        return -errno.ENOENT
 
 class PatternView(View):
     """Abstract View which implements pattern based path handling.
@@ -72,3 +62,54 @@ class PatternView(View):
 
     def canHandlePath(self, path):
         return (self.pathRegEx.match(path) != None)
+
+class NodeView(PatternView):
+    """Abstract View which implements Node based paths.
+
+    Extending classes must implement def getRootNode(self). getRootDef(...)
+    returns a Node.
+    """
+
+    def __init__(self, pathPattern):
+        PatternView.__init__(self, pathPattern)
+
+    def getNode(self, path):
+        n = self.getRootNode()
+
+        for e in path.split('/')[1:]:
+            n = n.getChildNode(e)
+
+            if not n:
+                # it seems like we are trying to fetch a node for an illegal
+                # path
+
+                break
+
+        return n
+
+    @log.logCall
+    def getattr(self, path):
+        n = self.getNode(path)
+
+        if not n:
+            return -errno.ENOENT
+
+        return n.getattr(path)
+
+    @log.logCall
+    def readdir(self, path, offset):
+        n = self.getNode(path)
+
+        if not n:
+            return -errno.ENOENT
+
+        return n.readdir(path, offset)
+
+    @log.logCall
+    def symlink(self, path, linkPath):
+        n = self.getNode(path)
+
+        if not n:
+            return -errno.ENOENT
+
+        return n.symlink(path, linkPath)

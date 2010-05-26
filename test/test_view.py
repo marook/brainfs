@@ -40,8 +40,10 @@ class AbstractViewTest(unittest.TestCase):
     def validateView(self, view, path):
         attr = view.getattr(path)
 
-        self.assertNotEquals(-errno.ENOSYS, attr)
-        self.assertNotEquals(-errno.ENOENT, attr)
+        self.assertNotEquals(-errno.ENOSYS, attr,
+                              msg = 'Expected attributes for path ' + path + ' but was ' + str(attr))
+        self.assertNotEquals(-errno.ENOENT, attr,
+                              msg = 'Expected attributes for path ' + path + ' but was ' + str(attr))
 
         if (attr.st_mode & stat.S_IFDIR == stat.S_IFDIR):
             # path is a directory
@@ -78,11 +80,29 @@ class AbstractViewTest(unittest.TestCase):
 
 class AbstractPatternViewTest(AbstractViewTest):
 
-    def validatePatternView(self, view, matchPath, notMatchPath):
+    def validatePatternView(self, view, matchPath, notMatchPath = None):
         self.validateView(view, matchPath)
 
         self.assertTrue(view.canHandlePath(matchPath))
-        self.assertFalse(view.canHandlePath(notMatchPath))
+
+        if notMatchPath:
+            self.assertFalse(view.canHandlePath(notMatchPath))
+
+class AbstractNodeViewTest(AbstractPatternViewTest):
+
+    def validateNode(self, node, path):
+        attr = node.getattr(path)
+
+        self.assertNotEquals(-errno.ENOSYS, attr)
+        self.assertNotEquals(-errno.ENOENT, attr)
+
+        # TODO
+
+    def validateNodeView(self, view, matchPath, notMatchPath = None):
+        self.validatePatternView(view, matchPath, notMatchPath)
+
+        self.validateNode(view.getRootNode(), '/')
+        
 
 if __name__ == "__main__":
     import brainfs
