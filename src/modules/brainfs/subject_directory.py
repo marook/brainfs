@@ -20,8 +20,15 @@
 import dom
 import log
 import errno
+import fuse
 import stat
 import view
+
+class ContentLinkNode(object):
+
+    def __init__(self, subject):
+        self.subject = subject
+        
 
 class SubjectDirectoryNode(object):
 
@@ -36,9 +43,17 @@ class SubjectDirectoryNode(object):
         return a
 
     def readdir(self, path, offset):
-        # TODO return real content
+        yield fuse.Direntry('.')
+        yield fuse.Direntry('..')
 
-        return []
+        # TODO calculate extention dynamically
+        yield fuse.Direntry('content.jpg')
+
+    def getChildNode(self, name):
+        if name == 'content.jpg':
+            return ContentLinkNode(self.subject)
+
+        return None
 
 class RootNode(object):
 
