@@ -52,6 +52,15 @@ class AbstractViewTest(unittest.TestCase):
             for entry in view.readdir(path, 0):
                 self.assertTrue(entry != None)
 
+                # TODO put '.' and '..' in set
+                if entry.name == '.':
+                    continue
+
+                if entry.name == '..':
+                    continue
+
+                self.validateView(view, path + '/' + entry.name)
+
             r = view.symlink('the file', path + '/the link')
         elif (attr.st_mode & stat.S_IFLNK == stat.S_IFLNK):
             l = view.readlink(path)
