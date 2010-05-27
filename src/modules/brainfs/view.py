@@ -106,6 +106,15 @@ class NodeView(PatternView):
         return n.readdir(path, offset)
 
     @log.logCall
+    def readlink(self, path):
+        n = self.getNode(path)
+
+        if not n:
+            return -errno.ENOENT
+
+        return n.readlink(path)
+
+    @log.logCall
     def symlink(self, path, linkPath):
         n = self.getNode(path)
 

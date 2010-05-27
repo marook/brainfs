@@ -28,7 +28,17 @@ class ContentLinkNode(object):
 
     def __init__(self, subject):
         self.subject = subject
-        
+
+    def getattr(self, path):
+        a = view.FSAttributes()
+        a.st_mode = stat.S_IFLNK | 0555
+        a.st_nlink = 2
+
+        return a
+
+    def readlink(self, path):
+        # TODO
+        return 'bla'
 
 class SubjectDirectoryNode(object):
 
