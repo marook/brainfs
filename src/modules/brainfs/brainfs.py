@@ -65,6 +65,7 @@ if __name__ == '__main__':
 
 import errno
 import fuse
+import push_file
 import root_directory
 import subject_directory
 
@@ -83,6 +84,8 @@ class BrainFS(fuse.Fuse):
         self.subjects = []
 
         self.views = [
+            root_directory.RootDirectoryView(self.subjects),
+            push_file.PushFileView(self.subjects),
             subject_directory.SubjectDirectoryView(self.subjects)
             ]
 

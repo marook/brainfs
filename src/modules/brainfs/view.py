@@ -122,3 +122,12 @@ class NodeView(PatternView):
             return -errno.ENOENT
 
         return n.symlink(path, linkPath)
+
+    @log.logCall
+    def read(self, path, len, offset):
+        n = self.getNode(path)
+
+        if not n:
+            return -errno.ENOENT
+
+        return n.read(path, len, offset)
