@@ -24,7 +24,12 @@ import fuse
 import stat
 import view
 
-class ContentLinkNode(object):
+class GenericContentNode(object):
+
+    def __init__(self, subject):
+        self.subject = subject
+
+class FileSubjectContentNode(object):
 
     def __init__(self, subject):
         self.subject = subject
@@ -59,9 +64,15 @@ class SubjectDirectoryNode(object):
         # TODO calculate extention dynamically
         yield fuse.Direntry('content.jpg')
 
+    def getContentNode(self):
+        if isinstance(self.subject, dom.FileSubject):
+            return FileSubjectContentNode(self.subject)
+
+        return GenericContentNode(self.subject)
+
     def getChildNode(self, name):
         if name == 'content.jpg':
-            return ContentLinkNode(self.subject)
+            return self.getContentNode()
 
         return None
 

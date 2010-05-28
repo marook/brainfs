@@ -63,7 +63,6 @@ if __name__ == '__main__':
 #====================================================================
 # here the application begins
 
-import content_link
 import errno
 import fuse
 import root_directory
@@ -84,9 +83,7 @@ class BrainFS(fuse.Fuse):
         self.subjects = []
 
         self.views = [
-            root_directory.RootDirectoryView(self.subjects),
-            subject_directory.SubjectDirectoryView(self.subjects),
-            content_link.ContentView(self.subjects)
+            subject_directory.SubjectDirectoryView(self.subjects)
             ]
 
     def findView(self, path):
@@ -119,7 +116,7 @@ class BrainFS(fuse.Fuse):
         return view.readdir(path, offset)
             
     def readlink(self, path):
-        view = self.findView(linkPath)
+        view = self.findView(path)
 
         if not view:
             logging.info('No View for path ' + path)
