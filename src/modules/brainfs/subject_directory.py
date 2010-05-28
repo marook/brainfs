@@ -76,6 +76,22 @@ class SubjectDirectoryNode(object):
 
         return None
 
+class PushNode(object):
+
+    def __init__(self, subjects):
+        self.subjects = subjects
+
+    def getattr(self, path):
+        a = view.FSAttributes()
+        a.st_mode = stat.S_IFCHR | 0555
+        a.st_nlink = 2
+
+        return a
+
+    def read(self, path, len, offset):
+        # TODO
+        return 'todo'
+
 class RootNode(object):
 
     def __init__(self, subjects):
@@ -103,6 +119,9 @@ class RootNode(object):
         self.subjects.append(s)
 
     def getChildNode(self, name):
+        if name == '.push':
+            return PushNode(self.subjects)
+
         s = self.getSubjectForName(name)
 
         if not s:
@@ -114,7 +133,7 @@ class RootNode(object):
 class SubjectDirectoryView(view.NodeView):
 
     def __init__(self, subjects):
-        view.NodeView.__init__(self, '^/(.+)$')
+        view.NodeView.__init__(self)
 
         self.subjects = subjects
 

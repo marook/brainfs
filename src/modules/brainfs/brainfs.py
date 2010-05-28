@@ -65,8 +65,6 @@ if __name__ == '__main__':
 
 import errno
 import fuse
-import push_file
-import root_directory
 import subject_directory
 
 if not hasattr(fuse, '__version__'):
@@ -83,75 +81,26 @@ class BrainFS(fuse.Fuse):
         # TODO load subjects from persistent store
         self.subjects = []
 
-        self.views = [
-            root_directory.RootDirectoryView(self.subjects),
-            push_file.PushFileView(self.subjects),
-            subject_directory.SubjectDirectoryView(self.subjects)
-            ]
-
-    def findView(self, path):
-        for view in self.views:
-            if not view.canHandlePath(path):
-                continue
-
-            return view
-
-        return None
+        self.view = subject_directory.SubjectDirectoryView(self.subjects)
+        # TODO implement generic view delgate
 
     def getattr(self, path):
-        view = self.findView(path)
-
-        if not view:
-            logging.info('No View for path ' + path)
-
-            return -errno.ENOENT
-
-        return view.getattr(path)
+        return self.view.getattr(path)
 
     def readdir(self, path, offset):
-        view = self.findView(path)
-
-        if not view:
-            logging.info('No View for path ' + path)
-
-            return -errno.ENOENT
-
-        return view.readdir(path, offset)
+        return self.view.readdir(path, offset)
             
     def readlink(self, path):
-        view = self.findView(path)
-
-        if not view:
-            logging.info('No View for path ' + path)
-
-            return -errno.ENOENT
-
-        return view.readlink(path)
+        return self.view.readlink(path)
 
     def open(self, path, flags):
-        logging.warn('open not yet implemented: ' + path)
-
-        return -errno.ENOENT
+        return self.view.open(path, flags)
 
     def read(self, path, size, offset):
-        view = self.findView(linkPath)
-
-        if not view:
-            logging.info('No View for path ' + path)
-
-            return -errno.ENOENT
-
-        return view.read(path, size, offset)
+        return self,view.read(path, size, offset)
 
     def symlink(self, path, linkPath):
-        view = self.findView(linkPath)
-
-        if not view:
-            logging.info('No View for path ' + linkPath)
-
-            return -errno.ENOENT
-
-        return view.symlink(path, linkPath)
+        return self.view.symlink(path, linkPath)
 
 def main():
     import os

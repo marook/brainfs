@@ -86,17 +86,7 @@ class AbstractViewTest(unittest.TestCase):
             self.fail('Unknown attributes ' + str(attr))
 
 
-class AbstractPatternViewTest(AbstractViewTest):
-
-    def validatePatternView(self, view, matchPath, notMatchPath = None):
-        self.validateView(view, matchPath)
-
-        self.assertTrue(view.canHandlePath(matchPath))
-
-        if notMatchPath:
-            self.assertFalse(view.canHandlePath(notMatchPath))
-
-class AbstractNodeViewTest(AbstractPatternViewTest):
+class AbstractNodeViewTest(AbstractViewTest):
 
     def validateNode(self, node, path):
         attr = node.getattr(path)
@@ -106,8 +96,8 @@ class AbstractNodeViewTest(AbstractPatternViewTest):
 
         # TODO
 
-    def validateNodeView(self, view, matchPath, notMatchPath = None):
-        self.validatePatternView(view, matchPath, notMatchPath)
+    def validateNodeView(self, view, matchPath):
+        self.validateView(view, matchPath)
 
         self.validateNode(view.getRootNode(), '/')
         

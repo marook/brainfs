@@ -38,40 +38,12 @@ class FSAttributes(object):
         return '[' + ', '.join([field + ': ' + str(self.__dict__[field]) for field in self.__dict__]) + ']'
     
 
-class View(object):
-    """Abstract base class for all views.
-
-    A View needs to implement the following defs:
-
-    def canHandlePath(self, path): This method returns wheather the supplied
-    path can be handled by this view.
-    """
-
-    def getattr(self, path):
-        return -errno.ENOENT
-
-
-class PatternView(View):
-    """Abstract View which implements pattern based path handling.
-    """
-
-    def __init__(self, pathPattern):
-        import re
-
-        self.pathRegEx = re.compile(pathPattern)
-
-    def canHandlePath(self, path):
-        return (self.pathRegEx.match(path) != None)
-
-class NodeView(PatternView):
+class NodeView(object):
     """Abstract View which implements Node based paths.
 
     Extending classes must implement def getRootNode(self). getRootDef(...)
     returns a Node.
     """
-
-    def __init__(self, pathPattern):
-        PatternView.__init__(self, pathPattern)
 
     def getNode(self, path):
         n = self.getRootNode()
