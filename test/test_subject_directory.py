@@ -34,15 +34,15 @@ class SubjectDirectoryViewTest(test_view.AbstractNodeViewTest):
 
         view = subject_directory.SubjectDirectoryView(subjects)
 
-        self.validateNodeView(view,
-                              '/00_IMG008.jpg')
+        self.validateNodeView(view, '/')
+
+
+        self.validateNodeView(view, '/00_IMG008.jpg')
 
         r = view.symlink('the file', '/the link')
         # TODO assert r's content
 
-        self.validateNodeView(view,
-                              '/the file')
-
+        self.validateNodeView(view, '/the file')
 
 if __name__ == "__main__":
     import brainfs
