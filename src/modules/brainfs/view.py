@@ -49,6 +49,9 @@ class NodeView(object):
         n = self.getRootNode()
 
         for e in path.split('/')[1:]:
+            if e == '':
+                continue
+
             n = n.getChildNode(e)
 
             if not n:

@@ -112,6 +112,13 @@ class RootNode(object):
 
         return a
 
+    def readdir(self, path, offset):
+        yield fuse.Direntry('.')
+        yield fuse.Direntry('..')
+
+        for s in self.subjects:
+            yield fuse.Direntry(s.name)
+
     def symlink(self, path, linkPath):
         s = dom.FileSubject(path)
 
