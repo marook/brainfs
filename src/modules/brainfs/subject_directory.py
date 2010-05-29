@@ -42,8 +42,7 @@ class FileSubjectContentNode(object):
         return a
 
     def readlink(self, path):
-        # TODO
-        return 'bla'
+        return self.subject.fileName
 
 class SubjectDirectoryNode(object):
 
