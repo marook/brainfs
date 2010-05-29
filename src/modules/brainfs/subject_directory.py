@@ -120,7 +120,8 @@ class RootNode(object):
             yield fuse.Direntry(s.name)
 
     def symlink(self, path, linkPath):
-        s = dom.FileSubject(path)
+        # TODO strip last part from link path (strip '/' from '/path')
+        s = dom.FileSubject(linkPath)
 
         self.subjects.append(s)
 
@@ -130,10 +131,10 @@ class RootNode(object):
 
         s = self.getSubjectForName(name)
 
-        if not s:
-            return None
+        if s:
+            return SubjectDirectoryNode(s)
 
-        return SubjectDirectoryNode(s)
+        return None
         
 
 class SubjectDirectoryView(view.NodeView):

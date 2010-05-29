@@ -91,7 +91,9 @@ class NodeView(object):
 
     @log.logCall
     def symlink(self, path, linkPath):
-        n = self.getNode(path)
+        linkPathSegs = linkPath.split('/')
+
+        n = self.getNode('/'.join(linkPathSegs[0:len(linkPathSegs) - 2]))
 
         if not n:
             return -errno.ENOENT
