@@ -82,14 +82,11 @@ class PushNode(object):
 
     def getattr(self, path):
         a = view.FSAttributes()
-        a.st_mode = stat.S_IFCHR | 0777
-        a.st_nlink = 2
+        a.st_mode = stat.S_IFREG | 0444
+        a.st_nlink = 1
+        a.st_size = 0
 
         return a
-
-    def read(self, path, len, offset):
-        # TODO
-        return 'todo'
 
 class RootNode(object):
 
@@ -108,7 +105,7 @@ class RootNode(object):
 
     def getattr(self, path):
         a = view.FSAttributes()
-        a.st_mode = stat.S_IFDIR | 0555
+        a.st_mode = stat.S_IFDIR | 0755
         a.st_nlink = 2
 
         return a

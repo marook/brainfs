@@ -108,6 +108,17 @@ class NodeView(object):
         return n.symlink(path, linkPath)
 
     @log.logCall
+    def open(self, path, flags):
+        n = self.getNode(path)
+
+        if not n:
+            logging.warn('Try to open not existing node: ' + path)
+
+            return -errno.ENOENT
+
+        return n.read(path, len, offset)
+
+    @log.logCall
     def read(self, path, len, offset):
         n = self.getNode(path)
 
