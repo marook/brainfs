@@ -67,8 +67,10 @@ class AbstractViewTest(unittest.TestCase):
             self.assertNotEquals(-errno.ENOENT, l)
 
             self.assertTrue(len(l) > 0)
-        elif (attr.st_mode & stat.S_IFCHR == stat.S_IFCHR):
+        elif (attr.st_mode & stat.S_IFREG == stat.S_IFREG):
             self.assertTrue(attr.st_size >= 0)
+
+            self.assertTrue(view.open(path, 32768) == None)
 
             content = view.read(path, min(attr.st_size, 100), 0)
 
@@ -78,6 +80,8 @@ class AbstractViewTest(unittest.TestCase):
             self.assertTrue(content != None)
 
             logging.debug('Content: ' + str(content))
+
+            # TODO validate file close
 
             # TODO validate block file
             

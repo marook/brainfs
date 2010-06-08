@@ -116,7 +116,7 @@ class NodeView(object):
 
             return -errno.ENOENT
 
-        return n.read(path, len, offset)
+        return n.open(path, flags)
 
     @log.logCall
     def read(self, path, len, offset):
