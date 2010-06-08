@@ -72,7 +72,7 @@ class AbstractViewTest(unittest.TestCase):
 
             self.assertTrue(view.open(path, 32768) == None)
 
-            content = view.read(path, min(attr.st_size, 100), 0)
+            content = view.read(path, 4096, 0)
 
             self.assertNotEquals(-errno.ENOSYS, content)
             self.assertNotEquals(-errno.ENOENT, content)

@@ -84,9 +84,16 @@ class PushNode(object):
         a = view.FSAttributes()
         a.st_mode = stat.S_IFREG | 0444
         a.st_nlink = 1
-        a.st_size = 0
+        a.st_size = len('hello')
 
         return a
+
+    def open(self, path, flags):
+        # TODO validate read/write/append request
+        pass
+
+    def read(self, path, len, offset):
+        return 'hello'
 
 class RootNode(object):
 
