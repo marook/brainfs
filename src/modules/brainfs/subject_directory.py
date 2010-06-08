@@ -82,7 +82,7 @@ class PushNode(object):
 
     def getattr(self, path):
         a = view.FSAttributes()
-        a.st_mode = stat.S_IFCHR | 0555
+        a.st_mode = stat.S_IFCHR | 0777
         a.st_nlink = 2
 
         return a
@@ -95,6 +95,7 @@ class RootNode(object):
 
     def __init__(self, subjects):
         self.subjects = subjects
+        self.pushNodeName = '.push'
     
     def getSubjectForName(self, name):
         # TODO introduce dict for subjects
@@ -116,6 +117,8 @@ class RootNode(object):
         yield fuse.Direntry('.')
         yield fuse.Direntry('..')
 
+        yield fuse.Direntry(self.pushNodeName)
+
         for s in self.subjects:
             yield fuse.Direntry(s.name)
 
@@ -126,7 +129,7 @@ class RootNode(object):
         self.subjects.append(s)
 
     def getChildNode(self, name):
-        if name == '.push':
+        if name == self.pushNodeName:
             return PushNode(self.subjects)
 
         s = self.getSubjectForName(name)
