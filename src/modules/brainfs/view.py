@@ -19,6 +19,7 @@
 
 import errno
 import log
+import logging
 
 class FSAttributes(object):
     
@@ -67,6 +68,8 @@ class NodeView(object):
         n = self.getNode(path)
 
         if not n:
+            logging.debug('Try to read attributes from not existing node: ' + path)
+
             return -errno.ENOENT
 
         return n.getattr(path)
@@ -76,6 +79,8 @@ class NodeView(object):
         n = self.getNode(path)
 
         if not n:
+            logging.warn('Try to read not existing directory: ' + path)
+
             return -errno.ENOENT
 
         return n.readdir(path, offset)
@@ -85,6 +90,8 @@ class NodeView(object):
         n = self.getNode(path)
 
         if not n:
+            logging.warn('Try to read not existing link from node: ' + path)
+
             return -errno.ENOENT
 
         return n.readlink(path)
@@ -105,6 +112,8 @@ class NodeView(object):
         n = self.getNode(path)
 
         if not n:
+            logging.warn('Try to read from not existing node: ' + path)
+
             return -errno.ENOENT
 
         return n.read(path, len, offset)
