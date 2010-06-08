@@ -97,7 +97,7 @@ class BrainFS(fuse.Fuse):
         return self.view.open(path, flags)
 
     def read(self, path, size, offset):
-        return self,view.read(path, size, offset)
+        return self.view.read(path, size, offset)
 
     def symlink(self, path, linkPath):
         return self.view.symlink(path, linkPath)
