@@ -82,7 +82,7 @@ class PushNode(object):
 
     def getattr(self, path):
         a = view.FSAttributes()
-        a.st_mode = stat.S_IFREG | 0444
+        a.st_mode = stat.S_IFREG | 0644
         a.st_nlink = 1
         a.st_size = len('hello')
 
