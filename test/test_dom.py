@@ -53,6 +53,16 @@ class TestFileSubject(AbstractSubjectTest):
 
         self.assertEqual('brainfs', s.name)
 
+    def testFromUrl(self):
+        """Creates a FileSubject from an URL
+        """
+
+        s = dom.fromUrl('file:///usr')
+
+        self.validateSubject(s)
+
+        self.assertEquals('/usr', s.fileName)
+
 class TestHttpSubject(AbstractSubjectTest):
 
     def testReadData(self):
@@ -64,6 +74,18 @@ class TestHttpSubject(AbstractSubjectTest):
         self.validateSubject(s)
 
         self.assertEqual('localhost_index.html', s.name)
+
+    def testFromUrl(self):
+        """Creates a HttpSubject from an URL
+        """
+
+        s = dom.fromUrl('http://localhost')
+
+        self.validateSubject(s)
+
+        self.assertEquals('localhost', s.host)
+        self.assertEquals('', s.path)
+        self.assertEquals('GET', s.method)
 
 
 if __name__ == "__main__":
