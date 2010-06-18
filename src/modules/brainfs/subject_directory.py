@@ -21,6 +21,7 @@ import dom
 import log
 import errno
 import fuse
+import os
 import stat
 import view
 
@@ -38,6 +39,8 @@ class FileSubjectContentNode(object):
         a = view.FSAttributes()
         a.st_mode = stat.S_IFLNK | 0555
         a.st_nlink = 2
+        a.st_uid = os.getuid()
+        a.st_gid = os.getgid()
 
         return a
 
@@ -53,6 +56,8 @@ class SubjectDirectoryNode(object):
         a = view.FSAttributes()
         a.st_mode = stat.S_IFDIR | 0555
         a.st_nlink = 2
+        a.st_uid = os.getuid()
+        a.st_gid = os.getgid()
 
         return a
 
@@ -84,6 +89,8 @@ class PushNode(object):
         a = view.FSAttributes()
         a.st_mode = stat.S_IFREG | 0644
         a.st_nlink = 1
+        a.st_uid = os.getuid()
+        a.st_gid = os.getgid()
         a.st_size = len('hello')
 
         return a
@@ -114,6 +121,8 @@ class RootNode(object):
         a = view.FSAttributes()
         a.st_mode = stat.S_IFDIR | 0755
         a.st_nlink = 2
+        a.st_uid = os.getuid()
+        a.st_gid = os.getgid()
 
         return a
 
