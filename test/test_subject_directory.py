@@ -25,6 +25,8 @@ from brainfs import subject_directory
 class SubjectDirectoryViewTest(test_view.AbstractNodeViewTest):
 
     def validatePushNode(self, subjects, view):
+        attr = view.getattr('/.push')
+
         host = 'localhost'
         path = ''
 
@@ -35,7 +37,7 @@ class SubjectDirectoryViewTest(test_view.AbstractNodeViewTest):
 
         p = 0
         while p < len(url):
-            l = view.write('/.push', url[p:len(url)], p)
+            l = view.write('/.push', url[p:len(url)], p + attr.st_size)
 
             self.assertTrue(l > 0)
 
