@@ -128,3 +128,14 @@ class NodeView(object):
             return -errno.ENOENT
 
         return n.read(path, len, offset)
+
+    @log.logCall
+    def write(self, path, data, pos):
+        n = self.getNode(path)
+
+        if not n:
+            logging.warn('Try to write to not existing node: ' + path)
+
+            return -errno.ENOENT
+
+        return n.write(path, data, pos)

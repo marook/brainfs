@@ -102,6 +102,13 @@ class PushNode(object):
     def read(self, path, len, offset):
         return 'hello'
 
+    def write(self, path, data, pos):
+        i = data.index('\n')
+
+        # TODO
+        #return len(data)
+        return 1
+
 class RootNode(object):
 
     def __init__(self, subjects):

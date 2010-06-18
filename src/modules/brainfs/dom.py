@@ -80,7 +80,6 @@ class HttpSubject(Subject):
                 c.close()
 
         return Connection()
-        
 
 class Predicate(object):
     
@@ -94,3 +93,8 @@ class Predicate(object):
         """
         self.name = name
         self.namespace = namespace
+
+def fromUrl(url, method = 'GET'):
+    # TODO parse url and return FileSubjectNode or HttpSubjectNode
+
+    return None
