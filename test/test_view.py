@@ -19,6 +19,7 @@
 
 import errno
 import logging
+import os
 import stat
 import unittest
 from brainfs import view
@@ -39,6 +40,11 @@ class AbstractViewTest(unittest.TestCase):
 
     def validateView(self, view, path):
         attr = view.getattr(path)
+
+        # assert every file belongs to 'me'
+        # right now this is the default behaviour
+        self.assertEquals(os.getuid(), attr.st_uid)
+        self.assertEquals(os.getgid(), attr.st_gid)
 
         self.assertNotEquals(-errno.ENOSYS, attr,
                               msg = 'Expected attributes for path ' + path + ' but was ' + str(attr))
