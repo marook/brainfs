@@ -30,6 +30,37 @@ class GenericContentNode(object):
 
     def __init__(self, subject):
         self.subject = subject
+        self.content = None
+
+    def getattr(self, path):
+        a = view.FSAttributes()
+        a.st_mode = stat.S_IFREG | 0444
+        a.st_nlink = 2
+        a.st_uid = os.getuid()
+        a.st_gid = os.getgid()
+        a.st_size = len(self.getContent())
+
+        return a
+
+    def getContent(self):
+        if self.content == None:
+            logging.debug('Reading content for subject %s', self.subject)
+
+            c = self.subject.connection
+
+            self.content = c.read()
+
+            c.close()
+
+        return self.content
+
+    def open(self, path, flags):
+        pass
+
+    def read(self, path, len, offset):
+        c = self.getContent()
+
+        return c[offset:len - offset]
 
 class FileSubjectContentNode(object):
 
