@@ -57,11 +57,11 @@ class TestFileSubject(AbstractSubjectTest):
         """Creates a FileSubject from an URL
         """
 
-        s = dom.fromUrl('file:///usr')
+        s = dom.fromUrl('file:///etc/hosts')
 
         self.validateSubject(s)
 
-        self.assertEquals('/usr', s.fileName)
+        self.assertEquals('/etc/hosts', s.fileName)
 
 class TestHttpSubject(AbstractSubjectTest):
 

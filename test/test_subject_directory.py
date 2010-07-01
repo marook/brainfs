@@ -53,7 +53,7 @@ class SubjectDirectoryViewTest(test_view.AbstractNodeViewTest):
             if not s.path == path:
                 continue
 
-            if not s.port == 80:
+            if not s.port == None:
                 continue
 
             if not s.method == 'GET':

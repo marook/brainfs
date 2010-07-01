@@ -19,6 +19,7 @@
 
 import dom
 import log
+import logging
 import errno
 import fuse
 import os
@@ -105,9 +106,16 @@ class PushNode(object):
     def write(self, path, data, pos):
         i = data.index('\n')
 
-        # TODO
-        #return len(data)
-        return 1
+        url = data[0:i]
+
+        # TODO create FileSubject or HttpSubject based on URI
+        s = dom.fromUrl(url)
+
+        logging.debug('Parsed subject %s from URL %s' % (s, url))
+
+        self.subjects.append(s)
+
+        return i + 1
 
 class RootNode(object):
 

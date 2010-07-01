@@ -27,6 +27,9 @@ class Subject(object):
     def __init__(self, name):
         self.name = name
 
+    def __str__(self):
+        return '[' + ', '.join([field + ': ' + str(self.__dict__[field]) for field in self.__dict__]) + ']'
+
 class FileSubject(Subject):
     
     def __init__(self, fileName):
@@ -95,6 +98,16 @@ class Predicate(object):
         self.namespace = namespace
 
 def fromUrl(url, method = 'GET'):
-    # TODO parse url and return FileSubjectNode or HttpSubjectNode
+    import urlparse
+
+    u = urlparse.urlparse(url)
+
+    if u.scheme == 'file':
+        return FileSubject(u.path)
+
+    if u.scheme == 'http':
+        return HttpSubject(u.path, u.hostname, u.port, method)
+
+    # TODO raise error
 
     return None
