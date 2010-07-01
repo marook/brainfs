@@ -64,6 +64,7 @@ class SubjectDirectoryViewTest(test_view.AbstractNodeViewTest):
         if not found:
             self.fail(msg = 'Can\'t find pushed subject')
 
+        self.validateNodeView(view, '/' + host)
 
     def testInterface(self):
         """Validate View interface for SubjectDirectoryView
